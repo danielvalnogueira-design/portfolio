@@ -766,19 +766,17 @@
     .cv-canvas-wrap {
       width: 100%;
       height: 100%;
-      overflow-y: auto;
+      overflow: hidden;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 24px 0;
-      gap: 16px;
+      justify-content: center;
     }
 
     .cv-canvas-wrap canvas {
       display: block;
       max-width: 100%;
-      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
+      max-height: 100%;
+      object-fit: contain;
     }
 
     .cv-loader {
@@ -835,7 +833,6 @@
       .lang-grid { gap: 24px; }
       .section-header { flex-direction: column; gap: 4px; }
       .cv-modal { width: 96vw; height: 92vh; border-radius: 12px; }
-      .cv-canvas-wrap { padding: 16px 0; }
     }
   </style>
 </head>
@@ -1296,10 +1293,10 @@
 
     // CV Modal with pdf.js
     let cvLoaded = false;
+    const CV_URL = new URL('cv.pdf', window.location.href).href;
 
     function openCvModal() {
-      const overlay = document.getElementById('cvOverlay');
-      overlay.classList.add('open');
+      document.getElementById('cvOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
       if (!cvLoaded) loadCvPdf();
     }
@@ -1315,31 +1312,32 @@
 
     function loadCvPdf() {
       const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs';
-      script.type = 'module';
-      script.onload = () => renderCv();
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      script.onload = () => {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        renderCv();
+      };
       document.head.appendChild(script);
     }
 
     async function renderCv() {
-      const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.worker.min.mjs';
-
       try {
-        const pdf = await pdfjsLib.getDocument('cv.pdf').promise;
+        const pdf = await pdfjsLib.getDocument(CV_URL).promise;
         const wrap = document.getElementById('cvCanvasWrap');
         const loader = document.getElementById('cvLoader');
+        const dpr = window.devicePixelRatio || 1;
 
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const scale = Math.min(720 / page.getViewport({ scale: 1 }).width, 2);
-          const viewport = page.getViewport({ scale });
-          const canvas = document.createElement('canvas');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          wrap.appendChild(canvas);
-          await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-        }
+        const page = await pdf.getPage(1);
+        const unscaled = page.getViewport({ scale: 1 });
+        const fitScale = Math.min(wrap.clientWidth / unscaled.width, wrap.clientHeight / unscaled.height);
+        const viewport = page.getViewport({ scale: fitScale * dpr });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.style.width = (viewport.width / dpr) + 'px';
+        canvas.style.height = (viewport.height / dpr) + 'px';
+        wrap.appendChild(canvas);
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
 
         loader.classList.add('hidden');
         cvLoaded = true;
