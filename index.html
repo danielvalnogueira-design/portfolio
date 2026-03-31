@@ -668,6 +668,142 @@
       font-weight: 300;
     }
 
+    /* ========== CV BUTTON ========== */
+    .cv-btn {
+      background: var(--white) !important;
+      color: var(--black) !important;
+      border-color: var(--white) !important;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    .cv-btn:hover {
+      background: transparent !important;
+      color: var(--white) !important;
+      border-color: rgba(255,255,255,0.4) !important;
+    }
+
+    /* ========== CV MODAL ========== */
+    .cv-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease);
+    }
+
+    .cv-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .cv-modal {
+      position: relative;
+      width: 90vw;
+      max-width: 800px;
+      height: 88vh;
+      background: var(--gray-100);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.4);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.35s var(--ease);
+    }
+
+    .cv-overlay.open .cv-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .cv-modal-actions {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+
+    .cv-modal-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.2s var(--ease);
+    }
+
+    .cv-download-btn {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .cv-download-btn:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .cv-close-btn {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--gray-700);
+    }
+
+    .cv-close-btn:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .cv-canvas-wrap {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 16px;
+    }
+
+    .cv-canvas-wrap canvas {
+      display: block;
+      max-width: 100%;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .cv-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-100);
+      transition: opacity 0.3s;
+    }
+
+    .cv-loader.hidden { opacity: 0; pointer-events: none; }
+
+    .cv-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: cvSpin 0.7s linear infinite;
+    }
+
+    @keyframes cvSpin { to { transform: rotate(360deg); } }
+
     /* ========== MOBILE ========== */
     @media (max-width: 768px) {
       .hero { padding: 120px 0 64px; }
@@ -698,6 +834,8 @@
       .hero-link { text-align: center; justify-content: center; }
       .lang-grid { gap: 24px; }
       .section-header { flex-direction: column; gap: 4px; }
+      .cv-modal { width: 96vw; height: 92vh; border-radius: 12px; }
+      .cv-canvas-wrap { padding: 16px 0; }
     }
   </style>
 </head>
@@ -731,6 +869,7 @@
           <div class="hero-links">
             <a class="hero-link" href="mailto:danielvalnogueira@gmail.com">Email me</a>
             <a class="hero-link" href="https://www.linkedin.com/in/danielnogueiradeveloper" target="_blank" rel="noopener">LinkedIn</a>
+            <button class="hero-link cv-btn" onclick="openCvModal()">View CV</button>
           </div>
         </div>
         <div class="hero-stats">
@@ -1045,6 +1184,18 @@
 
   </div>
 
+  <!-- CV MODAL -->
+  <div class="cv-overlay" id="cvOverlay" onclick="if(event.target===this)closeCvModal()">
+    <div class="cv-modal">
+      <div class="cv-modal-actions">
+        <a class="cv-modal-btn cv-download-btn" href="cv.pdf" download="Daniel-Nogueira-CV.pdf" title="Download CV">&#8595;</a>
+        <button class="cv-modal-btn cv-close-btn" onclick="closeCvModal()" title="Close">&times;</button>
+      </div>
+      <div class="cv-loader" id="cvLoader"><div class="cv-spinner"></div></div>
+      <div class="cv-canvas-wrap" id="cvCanvasWrap"></div>
+    </div>
+  </div>
+
   <footer>Daniel Nogueira &middot; 2026</footer>
 
   <script>
@@ -1142,6 +1293,60 @@
       hamburger.classList.toggle('open');
       document.getElementById('navLinks').classList.toggle('open');
     });
+
+    // CV Modal with pdf.js
+    let cvLoaded = false;
+
+    function openCvModal() {
+      const overlay = document.getElementById('cvOverlay');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (!cvLoaded) loadCvPdf();
+    }
+
+    function closeCvModal() {
+      document.getElementById('cvOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCvModal();
+    });
+
+    function loadCvPdf() {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs';
+      script.type = 'module';
+      script.onload = () => renderCv();
+      document.head.appendChild(script);
+    }
+
+    async function renderCv() {
+      const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.worker.min.mjs';
+
+      try {
+        const pdf = await pdfjsLib.getDocument('cv.pdf').promise;
+        const wrap = document.getElementById('cvCanvasWrap');
+        const loader = document.getElementById('cvLoader');
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const scale = Math.min(720 / page.getViewport({ scale: 1 }).width, 2);
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          wrap.appendChild(canvas);
+          await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        }
+
+        loader.classList.add('hidden');
+        cvLoaded = true;
+      } catch (err) {
+        document.getElementById('cvLoader').innerHTML = '<span style="color:var(--accent);font-size:0.9rem;">Failed to load CV</span>';
+      }
+    }
   </script>
 
 </body>
