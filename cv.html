@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Daniel Nogueira — CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #2d2d2d;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    font-size: 8.6pt;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Header ── */
+  .header {
+    background: #0f1117;
+    color: #fff;
+    padding: 28px 36px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 220px;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(163, 38, 26, 0.15));
+    pointer-events: none;
+  }
+
+  .header h1 {
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .header .role {
+    font-size: 10pt;
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.02em;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 18px;
+    margin-top: 12px;
+    font-size: 8pt;
+    color: rgba(255,255,255,0.75);
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact-row a:hover { color: #fff; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .contact-icon {
+    width: 13px;
+    height: 13px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7pt;
+    flex-shrink: 0;
+  }
+
+  /* ── Body ── */
+  .body {
+    padding: 20px 36px 16px;
+  }
+
+  /* ── Section ── */
+  .section { margin-bottom: 14px; }
+
+  .section-title {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a3261a;
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8e4e0;
+  }
+
+  /* ── Summary ── */
+  .summary {
+    font-size: 8.6pt;
+    color: #444;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* ── Skills ── */
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+
+  .skill-category {
+    font-size: 7.5pt;
+    font-weight: 600;
+    color: #0f1117;
+    min-width: 72px;
+    padding-top: 3px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    flex: 1;
+  }
+
+  .tag {
+    font-size: 7.6pt;
+    font-weight: 500;
+    color: #444;
+    background: #f4f3f1;
+    border: 1px solid #e8e5e1;
+    padding: 2.5px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* ── Experience ── */
+  .job {
+    margin-bottom: 12px;
+  }
+
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .job-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #0f1117;
+  }
+
+  .job-date {
+    font-size: 8pt;
+    font-weight: 500;
+    color: #888;
+  }
+
+  .job-company {
+    font-size: 8.4pt;
+    color: #777;
+    margin-bottom: 5px;
+  }
+
+  .job-intro {
+    font-size: 8.4pt;
+    color: #555;
+    margin-bottom: 7px;
+    font-style: italic;
+  }
+
+  .project {
+    margin-bottom: 7px;
+  }
+
+  .project-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .project-name {
+    font-weight: 600;
+    font-size: 8.8pt;
+    color: #1a1a1a;
+  }
+
+  .project-stack {
+    font-size: 7.4pt;
+    color: #999;
+    font-weight: 400;
+  }
+
+  ul { list-style: none; }
+
+  li {
+    position: relative;
+    padding-left: 11px;
+    font-size: 8.4pt;
+    color: #3a3a3a;
+    line-height: 1.5;
+    margin-bottom: 1px;
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6.5px;
+    width: 4px;
+    height: 1.5px;
+    background: #a3261a;
+    border-radius: 1px;
+  }
+
+  /* ── Bottom row ── */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+  }
+
+  .edu-item { margin-bottom: 5px; }
+
+  .edu-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .edu-title {
+    font-weight: 600;
+    font-size: 8.6pt;
+    color: #1a1a1a;
+  }
+
+  .edu-date {
+    font-size: 7.8pt;
+    color: #888;
+    font-weight: 500;
+  }
+
+  .edu-detail {
+    font-size: 8pt;
+    color: #777;
+  }
+
+  .lang-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0eeec;
+    font-size: 8.4pt;
+  }
+
+  .lang-item:last-child { border-bottom: none; }
+
+  .lang-name { font-weight: 600; color: #1a1a1a; }
+  .lang-level { color: #777; }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Daniel Nogueira</h1>
+    <div class="role">Full Stack Developer</div>
+    <div class="contact-row">
+      <a class="contact-item" href="mailto:danielvalnogueira@gmail.com">
+        <span class="contact-icon">@</span> danielvalnogueira@gmail.com
+      </a>
+      <span class="contact-item">
+        <span class="contact-icon">T</span> +351 919 211 112
+      </span>
+      <span class="contact-item">
+        <span class="contact-icon">&#9679;</span> Cyprus
+      </span>
+      <a class="contact-item" href="https://linkedin.com/in/danielnogueiradeveloper">
+        <span class="contact-icon">in</span> danielnogueiradeveloper
+      </a>
+      <a class="contact-item" href="https://danielvalnogueira-design.github.io/portfolio">
+        <span class="contact-icon">&#9670;</span> portfolio
+      </a>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="section">
+      <div class="section-title">Summary</div>
+      <p class="summary">Full Stack Developer with 4 years of experience building enterprise web applications end-to-end. Strong backend focus with Java (Spring Boot, Quarkus), REST API design, and database management. Experienced in real-time systems, OAuth2/OIDC authentication, AWS S3 integration, and CI/CD pipelines.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Technical Skills</div>
+      <div class="skills-row">
+        <span class="skill-category">Backend</span>
+        <div class="skill-tags">
+          <span class="tag">Java 25</span><span class="tag">Spring Boot</span><span class="tag">Spring Batch</span><span class="tag">Quarkus</span><span class="tag">REST APIs</span><span class="tag">JPA/Hibernate</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <span class="skill-category">Frontend</span>
+        <div class="skill-tags">
+          <span class="tag">Vue 3</span><span class="tag">TypeScript</span><span class="tag">Quasar</span><span class="tag">Angular</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <span class="skill-category">Data</span>
+        <div class="skill-tags">
+          <span class="tag">PostgreSQL</span><span class="tag">SQL Server</span><span class="tag">Liquibase</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <span class="skill-category">Cloud/DevOps</span>
+        <div class="skill-tags">
+          <span class="tag">AWS S3</span><span class="tag">Docker</span><span class="tag">Nginx</span><span class="tag">GitLab CI/CD</span>
+        </div>
+      </div>
+      <div class="skills-row">
+        <span class="skill-category">Other</span>
+        <div class="skill-tags">
+          <span class="tag">Keycloak (OAuth2)</span><span class="tag">JWT</span><span class="tag">ActiveMQ (AMQP)</span><span class="tag">SSE</span><span class="tag">WebSockets</span><span class="tag">JUnit 5</span><span class="tag">Playwright</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Experience</div>
+
+      <div class="job">
+        <div class="job-head">
+          <span class="job-title">Full Stack Developer</span>
+          <span class="job-date">Mar 2023 – Present</span>
+        </div>
+        <div class="job-company">Prozis · Cyprus</div>
+        <div class="job-intro">Building and maintaining 4 enterprise platforms (backend + frontend) for HR, product management, and recruitment.</div>
+
+        <div class="project">
+          <div class="project-head">
+            <span class="project-name">Employee Portal</span>
+            <span class="project-stack">Quarkus · Java 25 · Vue 3 · SQL Server · Keycloak · AWS S3</span>
+          </div>
+          <ul>
+            <li>Built expense management module with bulk approval workflows, document validation, and S3 file uploads</li>
+            <li>Developed real-time chat system with @mentions, file attachments, read tracking, and reply threading</li>
+            <li>Implemented push notifications using Firebase Cloud Messaging with AMQP consumers</li>
+            <li>Hardened security: migrated secrets to CI variables, added DOMPurify sanitisation, fixed open redirects</li>
+          </ul>
+        </div>
+
+        <div class="project">
+          <div class="project-head">
+            <span class="project-name">HR / Recruitment Platform</span>
+            <span class="project-stack">Quarkus · Java 25 · Vue 3 · PostgreSQL · SSE · AWS S3</span>
+          </div>
+          <ul>
+            <li>Built end-to-end recruitment system: candidate pipelines with Kanban board, approval workflows, email templates</li>
+            <li>Implemented SSE-based real-time notification system with type filtering, grouping, and timeline history</li>
+            <li>Migrated database from SQL Server to PostgreSQL with full Liquibase changelog rewrite</li>
+            <li>Restructured backend from flat packages to domain-driven feature packages</li>
+          </ul>
+        </div>
+
+        <div class="project">
+          <div class="project-head">
+            <span class="project-name">Product Lifecycle Management</span>
+            <span class="project-stack">Spring Boot · Java 25 · Vue 3 · PostgreSQL · AWS S3</span>
+          </div>
+          <ul>
+            <li>Developed file viewer with PDF rendering, image annotation via canvas overlays, and side-by-side comparison</li>
+            <li>Built workflow automation with configurable phase rules, task triggers, and approval chains</li>
+            <li>Migrated file storage to AWS S3 with presigned URL generation for secure downloads</li>
+          </ul>
+        </div>
+
+        <div class="project">
+          <div class="project-head">
+            <span class="project-name">Careers Portal</span>
+            <span class="project-stack">Vue 3 · TypeScript · Nginx</span>
+          </div>
+          <ul>
+            <li>Built public recruitment site from scratch with job listings, location maps, and multi-step application form</li>
+            <li>Configured Nginx with CSP headers, rate limiting, and request timeout cascades</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <span class="job-title">Full Stack Developer</span>
+          <span class="job-date">2022 – 2023</span>
+        </div>
+        <div class="job-company">The Pineapple Corporation · Porto</div>
+        <ul>
+          <li>Developed features and resolved defects in CRM software using Angular and TypeScript</li>
+          <li>Optimised cross-device responsiveness and contributed to embedded systems development</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="section">
+        <div class="section-title">Education</div>
+        <div class="edu-item">
+          <div class="edu-head">
+            <span class="edu-title">Tecnologias e Prog. de Sistemas de Informacao</span>
+            <span class="edu-date">2020 – 2021</span>
+          </div>
+          <div class="edu-detail">ATEC · CET Level 5 (EQF)</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-head">
+            <span class="edu-title">Gestao de Sistemas Informaticos</span>
+            <span class="edu-date">2015 – 2018</span>
+          </div>
+          <div class="edu-detail">EPVC · Level 4 (EQF)</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Languages</div>
+        <div class="lang-item"><span class="lang-name">Portuguese</span><span class="lang-level">Native</span></div>
+        <div class="lang-item"><span class="lang-name">English</span><span class="lang-level">Professional (B2/C1)</span></div>
+        <div class="lang-item"><span class="lang-name">Spanish</span><span class="lang-level">Elementary (A2)</span></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
